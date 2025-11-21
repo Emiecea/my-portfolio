@@ -2,6 +2,7 @@
 
 import { X, ChevronLeft, ChevronRight } from "lucide-react"
 import { useEffect } from "react"
+import Image from "next/image"
 
 interface ImageLightboxProps {
   images: string[]
@@ -70,11 +71,14 @@ export default function ImageLightbox({ images, currentIndex, onClose, onNext, o
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-full h-full flex items-center justify-center">
-          <img
-            src={images[currentIndex] || "/placeholder.svg"}
-            alt="Project preview"
-            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-          />
+          <div className="relative w-full h-full">
+            <Image
+              src={images[currentIndex] || "/placeholder.svg"}
+              alt="Project preview"
+              fill
+              className="object-contain rounded-lg shadow-2xl"
+            />
+          </div>
         </div>
       </div>
 

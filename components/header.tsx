@@ -30,7 +30,7 @@ export default function Header() {
       setLastScrollY(currentScrollY)
 
       // Detect active section
-      const sections = ["home", "about", "skills", "experience", "projects", "contact"]
+      const sections = ["home", "about", "skills", "workflow", "experience", "projects", "contact"]
       for (const sectionId of sections) {
         const element = document.getElementById(sectionId)
         if (element) {
@@ -59,6 +59,7 @@ export default function Header() {
     { id: "home", label: "Home" },
     { id: "about", label: "About" },
     { id: "skills", label: "Skills" },
+    { id: "workflow", label: "Workflow" },
     { id: "experience", label: "Experience" },
     { id: "projects", label: "Projects" },
     { id: "contact", label: "Contact" },

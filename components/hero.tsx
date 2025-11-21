@@ -1,14 +1,53 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef } from "react"
 import { Github, Linkedin, Mail, MapPin, ChevronDown } from "lucide-react"
+import gsap from "gsap"
 import FlipCard from "./flip-card"
+import { useParallax, useMagnetic } from "@/lib/gsap-utils"
 
 export default function Hero() {
-  const [isVisible, setIsVisible] = useState(false)
+  const textContentRef = useRef<HTMLDivElement>(null)
+  const imageContentRef = useRef<HTMLDivElement>(null)
+  const socialLinksRef = useRef<HTMLDivElement>(null)
+  const blob1Ref = useParallax(0.3)
+  const blob2Ref = useParallax(0.5)
 
   useEffect(() => {
-    setIsVisible(true)
+    // Animate text content on mount
+    if (textContentRef.current) {
+      gsap.fromTo(
+        textContentRef.current,
+        { x: -50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.2 }
+      )
+    }
+
+    // Animate image content on mount
+    if (imageContentRef.current) {
+      gsap.fromTo(
+        imageContentRef.current,
+        { x: 50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.5 }
+      )
+    }
+
+    // Stagger animate social links
+    if (socialLinksRef.current) {
+      const links = socialLinksRef.current.children
+      gsap.fromTo(
+        links,
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "back.out(1.7)",
+          delay: 0.8,
+        }
+      )
+    }
   }, [])
 
   const scrollToNext = () => {
@@ -20,12 +59,13 @@ export default function Hero() {
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#252423] via-[#2a2826] to-[#1a1918]">
+      <div className="absolute inset-0 bg-linear-to-br from-[#252423] via-[#2a2826] to-[#1a1918]">
         <div className="absolute inset-0 opacity-20 sm:opacity-30">
-          <div className="absolute top-0 -left-4 w-48 sm:w-96 h-48 sm:h-96 bg-amber-500/20 rounded-full blur-2xl sm:blur-3xl animate-pulse" />
           <div
-            className="absolute bottom-0 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-slate-500/20 rounded-full blur-2xl sm:blur-3xl animate-pulse"
-            style={{ animationDelay: "1s" }}
+            className="absolute top-0 -left-4 w-48 sm:w-96 h-48 sm:h-96 bg-amber-500/20 rounded-full blur-2xl sm:blur-3xl"
+          />
+          <div
+            className="absolute bottom-0 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-slate-500/20 rounded-full blur-2xl sm:blur-3xl"
           />
         </div>
       </div>
@@ -34,17 +74,13 @@ export default function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           {/* Text Content */}
-          <div
-            className={`transform transition-all duration-1000 ${
-              isVisible ? "translate-x-0 opacity-100" : "-translate-x-10 opacity-0"
-            }`}
-          >
+          <div ref={textContentRef}>
             <div className="mb-6">
               <h2 className="text-amber-400 text-base sm:text-lg md:text-xl font-medium mb-2">Hello, I'm</h2>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4">
                 Gusti Gibran
                 <br />
-                <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
                   Avattar
                 </span>
               </h1>
@@ -71,47 +107,34 @@ export default function Hero() {
                 <span className="text-xs sm:text-sm md:text-base truncate">gustigibranavattr@gmail.com</span>
               </a>
               <div className="flex items-center space-x-3 text-gray-300">
-                <MapPin size={18} className="sm:w-5 sm:h-5 flex-shrink-0" />
+                <MapPin size={18} className="sm:w-5 sm:h-5 shrink-0" />
                 <span className="text-xs sm:text-sm md:text-base">Malang, Jawa Timur, Indonesia</span>
               </div>
             </div>
 
             {/* Social Links */}
-            <div className="flex space-x-3 sm:space-x-4">
-              <a
+            <div ref={socialLinksRef} className="flex space-x-3 sm:space-x-4">
+              <SocialLink
                 href="https://github.com/BranProHengker"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cursor-target p-2 sm:p-3 bg-white/10 hover:bg-amber-400/20 rounded-lg transition-all duration-300 hover:scale-110 group"
-              >
-                <Github size={20} className="sm:w-6 sm:h-6 text-white group-hover:text-amber-400" />
-              </a>
-              <a
+                icon={<Github size={20} className="sm:w-6 sm:h-6 text-white group-hover:text-amber-400" />}
+              />
+              <SocialLink
                 href="https://www.linkedin.com/in/gusti-gibran-avattar-819455389/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cursor-target p-2 sm:p-3 bg-white/10 hover:bg-amber-400/20 rounded-lg transition-all duration-300 hover:scale-110 group"
-              >
-                <Linkedin size={20} className="sm:w-6 sm:h-6 text-white group-hover:text-amber-400" />
-              </a>
-              <a
+                icon={<Linkedin size={20} className="sm:w-6 sm:h-6 text-white group-hover:text-amber-400" />}
+              />
+              <SocialLink
                 href="mailto:gustigibranavattr@gmail.com"
-                className="cursor-target p-2 sm:p-3 bg-white/10 hover:bg-amber-400/20 rounded-lg transition-all duration-300 hover:scale-110 group"
-              >
-                <Mail size={20} className="sm:w-6 sm:h-6 text-white group-hover:text-amber-400" />
-              </a>
+                icon={<Mail size={20} className="sm:w-6 sm:h-6 text-white group-hover:text-amber-400" />}
+                isEmail
+              />
             </div>
           </div>
 
           {/* Profile Image */}
-          <div
-            className={`transform transition-all duration-1000 delay-300 ${
-              isVisible ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"
-            }`}
-          >
-            <div className="cursor-target relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-400/30 to-slate-500/30 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl" />
-              <div className="relative bg-gradient-to-br from-slate-700/50 to-zinc-800/50 p-1 sm:p-2 rounded-2xl sm:rounded-3xl backdrop-blur-sm border border-white/10">
+          <div ref={imageContentRef} className="w-full max-w-lg mx-auto">
+            <div className="cursor-target relative aspect-square">
+              <div className="absolute inset-0 bg-linear-to-br from-amber-400/30 to-slate-500/30 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl" />
+              <div className="relative w-full h-full bg-linear-to-br from-slate-700/50 to-zinc-800/50 p-1 sm:p-2 rounded-2xl sm:rounded-3xl backdrop-blur-sm border border-white/10">
                 <FlipCard
                   images={[
                     "https://customer-assets.emergentagent.com/job_ada78b0a-4215-4e2c-a7d4-38851bd4db0f/artifacts/g6kbryy4_gw%20ver%20ai.png",
@@ -133,5 +156,30 @@ export default function Hero() {
         <ChevronDown size={24} className="sm:w-8 sm:h-8" />
       </button>
     </section>
+  )
+}
+
+// Magnetic Social Link Component
+function SocialLink({
+  href,
+  icon,
+  isEmail = false,
+}: {
+  href: string
+  icon: React.ReactNode
+  isEmail?: boolean
+}) {
+  const linkRef = useMagnetic(0.3)
+
+  return (
+    <a
+      ref={linkRef as React.RefObject<HTMLAnchorElement>}
+      href={href}
+      target={isEmail ? undefined : "_blank"}
+      rel={isEmail ? undefined : "noopener noreferrer"}
+      className="cursor-target p-2 sm:p-3 bg-white/10 hover:bg-amber-400/20 rounded-lg transition-all duration-300 group"
+    >
+      {icon}
+    </a>
   )
 }

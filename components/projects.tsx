@@ -1,8 +1,12 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { FolderGit2, ExternalLink, Github } from "lucide-react"
 import ImageLightbox from "./image-lightbox"
+import { useScrollAnimation, useStaggerAnimation, useParallax } from "@/lib/gsap-utils"
+
+import Image from "next/image"
+import SkeletonImage from "./skeleton-image"
 
 interface Project {
   title: string
@@ -16,41 +20,31 @@ interface Project {
 }
 
 export default function Projects() {
-  const [isVisible, setIsVisible] = useState(false)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [currentProjectImages, setCurrentProjectImages] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState<"all" | "frontend" | "uiux">("all")
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 },
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
-      }
-    }
-  }, [])
+  
+  const headerRef = useScrollAnimation({ triggerStart: "top 80%" })
+  const projectsGridRef = useStaggerAnimation(0.12, { triggerStart: "top 75%" })
+  const blob1Ref = useParallax(0.2)
+  const blob2Ref = useParallax(0.25)
 
   const projects: Project[] = [
+    {
+      title: "Bonkey Rent Web",
+      description: "Website rental untuk kebutuhan sewa barang dengan fitur pencarian dan pemesanan yang mudah.",
+      image: "/bonkey-rent-web-home.png",
+      technologies: ["NextJS", "React", "Tailwind CSS", "Typescript"],
+      github: "https://github.com/Sretes-PiceF/Project-Besar",
+      color: "from-cyan-500/20 to-blue-500/20",
+      category: ["all", "frontend"],
+    },
     {
       title: "Bonkey Stream",
       description:
         "Database anime website menggunakan Next.js dengan API dari Jikan untuk menampilkan informasi lengkap tentang anime.",
-      image:
-        "https://customer-assets.emergentagent.com/job_ada78b0a-4215-4e2c-a7d4-38851bd4db0f/artifacts/uszuosv0_Home.png",
+      image: "/bonkey-stream-home.png",
       technologies: ["NextJS", "Typescript", "Jikan API", "Tailwind CSS"],
       github: "https://github.com/BranProHengker/Bonkey-Stream",
       color: "from-blue-500/20 to-purple-500/20",
@@ -68,8 +62,7 @@ export default function Projects() {
     {
       title: "Bonkey-Rent",
       description: "Aplikasi rental mobile menggunakan React Native Expo untuk mempermudah proses penyewaan alat alat yang di butuhkan.",
-      image:
-        "https://customer-assets.emergentagent.com/job_ada78b0a-4215-4e2c-a7d4-38851bd4db0f/artifacts/abpfx5jo_SignIn.png",
+      image: "/bonkey-rent-mobile.png",
       technologies: ["React Native Expo","Typescript", "Mobile"],
       figma: "https://www.figma.com/design/hivoCY70p5RJBM8o5FRHa2/Bonkey-Rent?node-id=0-1&t=fbzUkTDQnhpr4suL-1",
       color: "from-orange-500/20 to-red-500/20",
@@ -80,7 +73,7 @@ export default function Projects() {
       description:
         "Design game untuk lomba GameSeed dengan fokus pada user interface dan user experience yang menarik.",
       image:
-        "https://customer-assets.emergentagent.com/job_ada78b0a-4215-4e2c-a7d4-38851bd4db0f/artifacts/67e974zs_Menu.png",
+        "/Beat-Tactic-GameSeed.png",
       technologies: ["Figma", "UI/UX Design", "Game Design"],
       figma: "https://www.figma.com/design/Fbl5iEursIBtpWrkI3FOZd/DESIGN-GAME-SEED?node-id=0-1&t=uU9zQ7h3pyNxc7pt-1",
       color: "from-pink-500/20 to-rose-500/20",
@@ -149,22 +142,18 @@ export default function Projects() {
 
   return (
     <>
-      <section id="projects" ref={sectionRef} className="cursor-targetpy-12 sm:py-20 md:py-32 bg-[#252423] relative overflow-hidden">
-        <div className="absolute top-1/3 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-amber-500/5 rounded-full blur-2xl sm:blur-3xl" />
+      <section id="projects" className="cursor-target py-12 sm:py-20 md:py-32 bg-[#252423] relative overflow-hidden">
+        <div  className="absolute top-1/3 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-amber-500/5 rounded-full blur-2xl sm:blur-3xl" />
         <div className="absolute bottom-0 left-0 w-48 sm:w-96 h-48 sm:h-96 bg-slate-500/5 rounded-full blur-2xl sm:blur-3xl" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div
-            className={`text-center mb-12 sm:mb-16 transform transition-all duration-1000 ${
-              isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-            }`}
-          >
+          <div ref={headerRef as React.RefObject<HTMLDivElement>} className="text-center mb-12 sm:mb-16">
             <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-4">
               <FolderGit2 className="text-amber-400 w-7 h-7 sm:w-8 sm:h-8" />
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">Featured Projects</h2>
             </div>
-            <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-amber-400 to-amber-600 mx-auto rounded-full" />
+            <div className="w-20 sm:w-24 h-1 bg-linear-to-r from-amber-400 to-amber-600 mx-auto rounded-full" />
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
@@ -189,29 +178,16 @@ export default function Projects() {
           </div>
 
           {/* Projects Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+          <div ref={projectsGridRef as React.RefObject<HTMLDivElement>} className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
             {filteredProjects.map((project, index) => (
-              <div
-                key={index}
-                className={`transform transition-all duration-1000 ${
-                  isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-                }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <div className="cursor-target group h-full bg-gradient-to-br from-slate-700/30 to-zinc-800/30 rounded-xl sm:rounded-2xl backdrop-blur-sm border border-white/10 hover:border-amber-400/50 transition-all duration-300 overflow-hidden shadow-xl hover:shadow-2xl hover:transform hover:-translate-y-2">
+              <div key={index}>
+                <div className="cursor-target group h-full bg-linear-to-br from-slate-700/30 to-zinc-800/30 rounded-xl sm:rounded-2xl backdrop-blur-sm border border-white/10 hover:border-amber-400/50 transition-all duration-300 overflow-hidden shadow-xl hover:shadow-2xl hover:transform hover:-translate-y-2">
                   <div
                     className="relative overflow-hidden h-40 sm:h-48 md:h-64 cursor-pointer"
                     onClick={() => openLightbox(project.image)}
                   >
-                    <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-50`} />
-                    <img
-                      src={project.image || "/placeholder.svg"}
-                      alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      loading="lazy"
-                      srcSet={`${project.image}?w=400 400w, ${project.image}?w=800 800w`}
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
+                    <div className={`absolute inset-0 bg-linear-to-br ${project.color} opacity-50`} />
+                    <ProjectImage src={project.image} title={project.title} priority={index < 2} />
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <div className="text-white text-center">
@@ -287,6 +263,28 @@ export default function Projects() {
           onPrev={currentProjectImages.length > 1 ? handlePrev : undefined}
         />
       )}
+    </>
+  )
+}
+
+function ProjectImage({ src, title, priority = false }: { src: string; title: string; priority?: boolean }) {
+  const [isLoading, setIsLoading] = useState(true)
+
+  return (
+    <>
+      {isLoading && <SkeletonImage />}
+      <Image
+        src={src || "/placeholder.svg"}
+        alt={title}
+        fill
+        priority={priority}
+        className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ${
+          isLoading ? "opacity-0" : "opacity-100"
+        }`}
+        onLoad={() => setIsLoading(false)}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        quality={90}
+      />
     </>
   )
 }
