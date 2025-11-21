@@ -1,10 +1,41 @@
 "use client"
 
+import { useState } from "react"
+import Image from "next/image"
+import { 
+  Github, 
+  Linkedin, 
+  Mail, 
+  MapPin, 
+  Phone,
+  Instagram,
+  Twitter,
+  ArrowRight,
+  Heart,
+  Sparkles,
+  Code2,
+  Palette
+} from "lucide-react"
+
 export default function Footer() {
+  const [email, setEmail] = useState("")
+  const [isSubscribed, setIsSubscribed] = useState(false)
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (email) {
+      setIsSubscribed(true)
+      setTimeout(() => {
+        setIsSubscribed(false)
+        setEmail("")
+      }, 3000)
     }
   }
 
@@ -17,96 +48,184 @@ export default function Footer() {
     { id: "contact", label: "Contact" },
   ]
 
-  return (
-    <footer className="bg-[#1a1918] border-t border-white/10 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-amber-500/5 rounded-full blur-2xl sm:blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-48 sm:w-96 h-48 sm:h-96 bg-slate-500/5 rounded-full blur-2xl sm:blur-3xl" />
+  const services = [
+    { icon: Code2, label: "Web Development" },
+    { icon: Palette, label: "UI/UX Design" },
+    { icon: Sparkles, label: "Game Design" },
+  ]
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+  const socialLinks = [
+    { icon: Github, href: "https://github.com/BranProHengker", label: "GitHub" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/gusti-gibran-avattar-819455389/", label: "LinkedIn" },
+    { icon: Instagram, href: "https://instagram.com/gustigibran", label: "Instagram" },
+    { icon: Twitter, href: "https://x.com/3Br4n", label: "Twitter" },
+  ]
+
+  return (
+    <footer className="bg-linear-to-b from-[#252423] to-[#1a1918] relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-linear-to-r from-amber-500/5 to-purple-500/5 rounded-full blur-3xl animate-spin-slow" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        {/* Call to Action Section */}
+     
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-white/10">
-          {/* Logo */}
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+          {/* Brand & Services */}
+          <div className="lg:col-span-1">
             <button
               onClick={() => scrollToSection("home")}
-              className="hover:opacity-80 transition-opacity duration-300"
+              className="group inline-block mb-6"
             >
-              <svg
-                width="80"
-                height="40"
-                viewBox="0 0 512 256"
-                className="h-8 sm:h-10 w-auto"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect width="100%" height="100%" fill="transparent" />
-                <text
-                  x="50%"
-                  y="55%"
-                  dominantBaseline="middle"
-                  textAnchor="middle"
-                  fontFamily="Montserrat, sans-serif"
-                  fontSize="80"
-                  letterSpacing="5"
-                >
-                  <tspan fill="#A0A0A0">GU</tspan>
-                  <tspan fill="#FAEDCE">TSI</tspan>
-                </text>
-              </svg>
+              <div className="flex items-center gap-3">
+                <div className="cursor-target relative w-12 h-12 group-hover:scale-110 transition-transform">
+                  <Image
+                    src="/gutsi-logo.svg"
+                    alt="Gutsi Logo"
+                    width={48}
+                    height={48}
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+                <div>
+                  <span className="text-white font-bold text-xl">Gibran</span>
+                  <p className="text-gray-400 text-xs">Portfolio</p>
+                </div>
+              </div>
             </button>
-            <p className="text-gray-400 text-xs sm:text-sm mt-2">UI/UX Designer & Frontend Developer</p>
+            <p className="text-gray-300 text-sm mb-6 leading-relaxed">
+              Crafting exceptional digital experiences through innovative design and cutting-edge development.
+            </p>
+            <div className="space-y-3">
+              {services.map((service) => (
+                <div key={service.label} className="flex items-center gap-3 text-gray-400 hover:text-amber-400 transition-colors">
+                  <service.icon className="w-4 h-4" />
+                  <span className="text-sm">{service.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Navigation Links */}
+          {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Navigation</h3>
-            <nav className="space-y-1 sm:space-y-2">
+            <h3 className="text-white font-bold mb-6 text-lg flex items-center gap-2">
+              <span className="w-8 h-0,5 bg-amber-400"></span>
+              Quick Links
+            </h3>
+            <nav className="grid grid-cols-2 gap-3">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="block text-gray-400 hover:text-amber-400 transition-colors duration-300 text-xs sm:text-sm"
+                  className="text-left text-gray-400 hover:text-amber-400 transition-all duration-300 text-sm flex items-center gap-2 group"
                 >
+                  <span className="w-0 group-hover:w-3 h-1px bg-amber-400 transition-all duration-300"></span>
                   {item.label}
                 </button>
               ))}
             </nav>
           </div>
 
-          {/* Social Links */}
+          {/* Contact Info */}
           <div>
-            <h3 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Connect</h3>
-            <div className="space-y-1 sm:space-y-2">
-              <a
-                href="https://github.com/BranProHengker"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-gray-400 hover:text-amber-400 transition-colors duration-300 text-xs sm:text-sm"
-              >
-                GitHub
-              </a>
-              <a
-                href="https://www.linkedin.com/in/gusti-gibran-avattar-819455389/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-gray-400 hover:text-amber-400 transition-colors duration-300 text-xs sm:text-sm"
-              >
-                LinkedIn
-              </a>
+            <h3 className="text-white font-bold mb-6 text-lg flex items-center gap-2">
+              <span className="w-8 h-0,5 bg-amber-400"></span>
+              Get in Touch
+            </h3>
+            <div className="space-y-4">
               <a
                 href="mailto:gustigibranavattr@gmail.com"
-                className="block text-gray-400 hover:text-amber-400 transition-colors duration-300 text-xs sm:text-sm"
+                className="flex items-center gap-3 text-gray-400 hover:text-amber-400 transition-colors group"
               >
-                Email
+                <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                <span className="text-sm">gustigibranavattr@gmail.com</span>
               </a>
+              <div className="flex items-center gap-3 text-gray-400">
+                <MapPin className="w-5 h-5" />
+                <span className="text-sm">Malang, East Java, Indonesia</span>
+              </div>
+              <div className="flex items-center gap-3 text-gray-400">
+                <Phone className="w-5 h-5" />
+                <span className="text-sm">Available for Freelance</span>
+              </div>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex gap-3 mt-6">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cursor-target w-10 h-10 bg-white/5 hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/50 rounded-lg flex items-center justify-center transition-all duration-300 group"
+                  aria-label={social.label}
+                >
+                  <social.icon className="w-5 h-5 text-gray-400 group-hover:text-amber-400 transition-colors" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h3 className="text-white font-bold mb-6 text-lg flex items-center gap-2">
+              <span className="w-8 h-0,5 bg-amber-400"></span>
+              Stay Updated
+            </h3>
+            <p className="text-gray-400 text-sm mb-4">
+              Subscribe to get the latest updates on my projects and blog posts.
+            </p>
+            <form onSubmit={handleSubscribe} className="space-y-3">
+              <div className="relative">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="cursor-target w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-400 transition-colors"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="cursor-target w-full bg-linear-to-r from-amber-400 to-orange-500 text-black font-semibold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-amber-400/25 transition-all duration-300 transform hover:scale-105"
+              >
+                {isSubscribed ? "✓ Subscribed!" : "Subscribe"}
+              </button>
+            </form>
+            {isSubscribed && (
+              <p className="text-green-400 text-sm mt-2 animate-fade-in">
+                Thank you for subscribing!
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-white/10"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <div className="bg-linear-to-r from-[#252423] via-[#1a1918] to-[#252423] px-6">
+              <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
             </div>
           </div>
         </div>
 
         {/* Bottom Footer */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-          <p className="text-gray-400 text-xs sm:text-sm text-center sm:text-left">
-            © 2025 Gusti Gibran Avattar. All rights reserved.
-          </p>
+        <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <p className="text-gray-400 text-sm">
+              © {new Date().getFullYear()} <span className="text-amber-400">Gusti Gibran</span>. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

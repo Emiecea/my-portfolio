@@ -108,7 +108,7 @@ export default function Hero() {
               </a>
               <div className="flex items-center space-x-3 text-gray-300">
                 <MapPin size={18} className="sm:w-5 sm:h-5 shrink-0" />
-                <span className="text-xs sm:text-sm md:text-base">Malang, Jawa Timur, Indonesia</span>
+                <span className="text-xs sm:text-sm md:text-base">Malang,East Java, Indonesia</span>
               </div>
             </div>
 
