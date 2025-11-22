@@ -35,7 +35,7 @@ Make sure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/BranProHengker/portfolio-nextjs.git
+git clone https://github.com/BranProHengker/portfolio-nextjs.git](https://github.com/BranProHengker/my-portfolio.git
 cd potrfolio
 ```
 
@@ -92,4 +92,4 @@ Interested in working together? Reach out to me!
 
 ---
 
-Created with ❤️ by **Gusti Gibran Avattar**
+ by **Gusti Gibran Avattar**
