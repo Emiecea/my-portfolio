@@ -1,6 +1,9 @@
 "use client"
+
 import { useState, useEffect } from "react"
-import { Menu, X } from "lucide-react"
+import { Menu, X, Home, User, Code2, Briefcase, FolderGit2, Mail, Workflow } from "lucide-react"
+import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -8,34 +11,30 @@ export default function Header() {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [activeSection, setActiveSection] = useState("home")
-  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
 
-      const maxScroll = 500
-      const progress = Math.min(currentScrollY / maxScroll, 1)
-      setScrollProgress(progress)
-
-      setIsScrolled(currentScrollY > 50)
-
-      if (currentScrollY < lastScrollY || currentScrollY < 100) {
+      // Handle Header Visibility (Smart Hide)
+      if (currentScrollY > 100) {
+        setIsVisible(currentScrollY < lastScrollY)
+        setIsScrolled(true)
+      } else {
         setIsVisible(true)
-      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false)
-        setIsMobileMenuOpen(false)
+        setIsScrolled(false)
       }
 
       setLastScrollY(currentScrollY)
 
-      // Detect active section
+      // Active Section Detection
       const sections = ["home", "about", "skills", "workflow", "experience", "projects", "contact"]
       for (const sectionId of sections) {
         const element = document.getElementById(sectionId)
         if (element) {
           const rect = element.getBoundingClientRect()
-          if (rect.top <= 150 && rect.bottom >= 150) {
+          // Check if section is roughly in the middle of the viewport
+          if (rect.top <= 300 && rect.bottom >= 300) {
             setActiveSection(sectionId)
             break
           }
@@ -43,7 +42,7 @@ export default function Header() {
       }
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [lastScrollY])
 
@@ -56,158 +55,111 @@ export default function Header() {
   }
 
   const navItems = [
-    { id: "home", label: "Home" },
-    { id: "about", label: "About" },
-    { id: "skills", label: "Skills" },
-    { id: "workflow", label: "Workflow" },
-    { id: "experience", label: "Experience" },
-    { id: "projects", label: "Projects" },
-    { id: "contact", label: "Contact" },
+    { id: "home", label: "Home", icon: Home },
+    { id: "about", label: "About", icon: User },
+    { id: "skills", label: "Skills", icon: Code2 },
+    { id: "workflow", label: "Workflow", icon: Workflow },
+    { id: "experience", label: "Experience", icon: Briefcase },
+    { id: "projects", label: "Projects", icon: FolderGit2 },
+    { id: "contact", label: "Contact", icon: Mail },
   ]
 
-  // Dynamic blur based on scroll
-  const blurClass =
-    scrollProgress < 0.3 ? "backdrop-blur-lg" : scrollProgress < 0.6 ? "backdrop-blur-xl" : "backdrop-blur-2xl"
-
-  const bgOpacity = 0.08 + scrollProgress * 0.12
-
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? "py-3" : "py-4"}`}>
-      <div className="cursor-target max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform flex justify-center",
+        isVisible ? "translate-y-0" : "-translate-y-full",
+        isScrolled ? "py-2" : "py-4"
+      )}
+    >
+      <div className="w-full max-w-7xl mx-auto px-4 flex justify-center">
         <div
-          className={`flex items-center justify-between h-12 sm:h-14 md:h-16 px-4 sm:px-6 rounded-full transition-all duration-500 ${blurClass} border relative overflow-hidden`}
-          style={{
-            backgroundColor: `rgba(30, 30, 35, ${bgOpacity})`,
-            borderColor: `rgba(250, 237, 206, ${0.15 + scrollProgress * 0.1})`,
-            boxShadow: isScrolled
-              ? "0 8px 32px 0 rgba(250, 237, 206, 0.12), inset 0 1px 0 0 rgba(250, 237, 206, 0.2)"
-              : "0 8px 32px 0 rgba(250, 237, 206, 0.06), inset 0 1px 0 0 rgba(250, 237, 206, 0.12)",
-          }}
+          className={cn(
+            "relative flex items-center justify-between px-4 py-2 rounded-full border transition-all duration-500 w-full md:w-auto md:gap-8",
+            isScrolled 
+              ? "bg-[#1a1918]/80 border-amber-500/20 backdrop-blur-xl shadow-lg shadow-amber-500/5" 
+              : "bg-transparent border-transparent"
+          )}
         >
-          <div
-            className="absolute inset-0 opacity-15 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(250, 237, 206, 0.15) 0%, rgba(160, 160, 160, 0.05) 50%, rgba(250, 237, 206, 0.15) 100%)",
-            }}
-          />
-
+          {/* Logo */}
           <button
             onClick={() => scrollToSection("home")}
-            className="relative transition-all duration-300 hover:scale-105 active:scale-95"
+            className="group relative z-10 flex items-center gap-3"
           >
-            <svg
-              width="70"
-              height="35"
-              viewBox="0 0 512 256"
-              className="h-7 sm:h-8 w-auto"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="100%" height="100%" fill="transparent" />
-              <text
-                x="50%"
-                y="55%"
-                dominantBaseline="middle"
-                textAnchor="middle"
-                fontFamily="Montserrat, sans-serif"
-                fontSize="80"
-                letterSpacing="5"
-              >
-                <tspan fill="#A0A0A0">GU</tspan>
-                <tspan fill="#FAEDCE">TSI</tspan>
-              </text>
-            </svg>
+          <div className="cursor-target relative w-12 h-12 group-hover:scale-110 transition-transform">
+                  <Image
+                    src="/gutsi-logo.svg"
+                    alt="Gutsi Logo"
+                    width={48}
+                    height={48}
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+            <div className="flex flex-col items-start">
+              <span className="text-white font-bold text-lg leading-none tracking-tight group-hover:text-amber-400 transition-colors">
+                Gusti Gibran Avattar
+              </span>
+              <span className="text-[10px] text-gray-400 uppercase tracking-widest">Portfolio</span>
+            </div>
           </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2 relative">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-1 p-1 bg-white/5 rounded-full border border-white/5 backdrop-blur-sm">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`relative px-4 py-2 rounded-full text-xs lg:text-sm font-medium transition-all duration-300 group ${
-                  activeSection === item.id ? "text-white" : "text-gray-400 hover:text-gray-100"
-                }`}
+                className={cn(
+                  "relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
+                  activeSection === item.id
+                    ? "text-black bg-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
+                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                )}
               >
-                {activeSection === item.id && (
-                  <span
-                    className="absolute inset-0 rounded-full transition-all duration-300"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(250, 237, 206, 0.3) 0%, rgba(160, 160, 160, 0.18) 100%)",
-                      boxShadow: "0 4px 15px rgba(250, 237, 206, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4)",
-                    }}
-                  />
-                )}
-
-                {activeSection !== item.id && (
-                  <span className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/8 transition-all duration-300" />
-                )}
-
-                <span className="relative z-10">{item.label}</span>
+                {item.label}
               </button>
             ))}
           </nav>
 
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden relative text-gray-300 hover:text-white p-2 rounded-lg transition-all duration-300 hover:bg-white/8 active:bg-white/12"
+            className="md:hidden relative z-10 p-2 text-gray-300 hover:text-amber-400 transition-colors"
           >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {isMobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
+        {/* Mobile Menu Dropdown */}
         <div
-          className={`md:hidden mt-4 mx-4 rounded-3xl ${blurClass} border overflow-hidden relative transition-all duration-300`}
-          style={{
-            backgroundColor: `rgba(30, 30, 35, ${bgOpacity + 0.06})`,
-            borderColor: `rgba(250, 237, 206, ${0.15 + scrollProgress * 0.1})`,
-            boxShadow: "0 8px 32px 0 rgba(250, 237, 206, 0.12), inset 0 1px 0 0 rgba(250, 237, 206, 0.2)",
-          }}
+          className={cn(
+            "absolute top-full left-0 right-0 mx-4 mt-2 p-4 rounded-3xl bg-[#1a1918]/95 border border-amber-500/10 backdrop-blur-xl transition-all duration-300 origin-top md:hidden",
+            isMobileMenuOpen 
+              ? "opacity-100 scale-100 translate-y-0" 
+              : "opacity-0 scale-95 -translate-y-4 pointer-events-none"
+          )}
         >
-          <div
-            className="absolute inset-0 opacity-15 pointer-events-none"
-            style={{
-              background: "linear-gradient(180deg, rgba(250, 237, 206, 0.15) 0%, rgba(160, 160, 160, 0.05) 100%)",
-            }}
-          />
-
-          <nav className="px-4 py-3 space-y-1 relative">
-            {navItems.map((item, index) => (
+          <nav className="grid grid-cols-2 gap-2">
+            {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`block w-full text-left px-4 py-2.5 rounded-lg transition-all duration-300 text-sm relative overflow-hidden group ${
-                  activeSection === item.id ? "text-white" : "text-gray-400 hover:text-gray-100"
-                }`}
-                style={{
-                  animationDelay: `${index * 50}ms`,
-                }}
+                className={cn(
+                  "flex items-center gap-3 p-3 rounded-xl transition-all duration-200",
+                  activeSection === item.id
+                    ? "bg-amber-400/10 text-amber-400 border border-amber-400/20"
+                    : "hover:bg-white/5 text-gray-400 hover:text-white"
+                )}
               >
-                {activeSection === item.id && (
-                  <span
-                    className="absolute inset-0 rounded-lg transition-all duration-300"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(250, 237, 206, 0.3) 0%, rgba(160, 160, 160, 0.18) 100%)",
-                      boxShadow: "0 4px 12px rgba(250, 237, 206, 0.25)",
-                    }}
-                  />
-                )}
-
-                {activeSection !== item.id && (
-                  <span className="absolute inset-0 rounded-lg bg-white/0 group-hover:bg-white/8 transition-all duration-300" />
-                )}
-
-                <span className="relative z-10">{item.label}</span>
+                <item.icon size={18} />
+                <span className="font-medium">{item.label}</span>
               </button>
             ))}
           </nav>
         </div>
-      )}
+      </div>
     </header>
   )
 }
+

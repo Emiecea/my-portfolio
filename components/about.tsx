@@ -19,7 +19,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="py-12 sm:py-20 md:py-32 bg-linear-to-b from-[#252423] to-[#1a1918] relative overflow-hidden"
+      className="py-12 sm:py-20 md:py-32 bg-linear-to-b from-[#232325] to-[#1a1918] relative overflow-hidden"
     >
       <div className="absolute top-0 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-amber-500/5 rounded-full blur-2xl sm:blur-3xl" />
       <div className="absolute bottom-0 left-0 w-48 sm:w-96 h-48 sm:h-96 bg-slate-500/5 rounded-full blur-2xl sm:blur-3xl" />

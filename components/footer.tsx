@@ -114,7 +114,7 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="text-white font-bold mb-6 text-lg flex items-center gap-2">
-              <span className="w-8 h-0,5 bg-amber-400"></span>
+              <span className="w-8 h-0.5 bg-amber-400"></span>
               Quick Links
             </h3>
             <nav className="grid grid-cols-2 gap-3">
@@ -134,7 +134,7 @@ export default function Footer() {
           {/* Contact Info */}
           <div>
             <h3 className="text-white font-bold mb-6 text-lg flex items-center gap-2">
-              <span className="w-8 h-0,5 bg-amber-400"></span>
+              <span className="w-8 h-0.5 bg-amber-400"></span>
               Get in Touch
             </h3>
             <div className="space-y-4">
@@ -175,7 +175,7 @@ export default function Footer() {
           {/* Newsletter */}
           <div>
             <h3 className="text-white font-bold mb-6 text-lg flex items-center gap-2">
-              <span className="w-8 h-0,5 bg-amber-400"></span>
+              <span className="w-8 h-0.5 bg-amber-400"></span>
               Stay Updated
             </h3>
             <p className="text-gray-400 text-sm mb-4">
