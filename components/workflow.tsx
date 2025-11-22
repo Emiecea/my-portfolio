@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef } from "react"
-import { Search, Code, Rocket, GitBranch } from "lucide-react"
+import { Search, Code, Rocket, GitBranch, Lightbulb } from "lucide-react"
 import { useScrollAnimation, useStaggerAnimation, useParallax } from "@/lib/gsap-utils"
 
 export default function Workflow() {
@@ -15,6 +15,12 @@ export default function Workflow() {
       title: "Understand",
       description: "Analyzing requirements, understanding the user's problem, and planning the best technical approach.",
       color: "bg-amber-400",
+    },
+    {
+      icon: <Lightbulb size={32} className="text-white" />,
+      title: "Ideation",
+      description: "Brainstorming creative concepts, finding inspiration, and crafting unique design solutions.",
+      color: "bg-orange-500",
     },
     {
       icon: <Code size={32} className="text-slate-900" />,
@@ -48,7 +54,7 @@ export default function Workflow() {
         </div>
 
         {/* Steps */}
-        <div ref={stepsRef as React.RefObject<HTMLDivElement>} className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <div ref={stepsRef as React.RefObject<HTMLDivElement>} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 relative">
           {/* Connecting Line (Desktop) */}
           <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-white/10 -z-10" />
 
