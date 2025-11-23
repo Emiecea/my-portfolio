@@ -191,7 +191,7 @@ export default function Hero() {
                   {/* Floating Card Detail */}
                   <div className="absolute bottom-6 left-6 right-6 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                      <p className="text-white font-medium text-sm">Gusti Gibran Avattar</p>
-                     <p className="text-gray-300 text-xs">Junior Fron-end Developer & UI/UX Designer</p>
+                     <p className="text-gray-300 text-xs">Junior Front-end Developer & UI/UX Designer</p>
                   </div>
                 </div>
               </div>
