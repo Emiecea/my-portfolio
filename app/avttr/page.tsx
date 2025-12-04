@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { supabase } from "@/lib/supabase"
-import { Project } from "@/lib/types"
+import { supabase, safeLogout } from "@/lib/supabase"
+import type { Project } from "@/lib/types"
 import TargetCursor from "@/components/TargetCursor"
 import { Plus, Pencil, Trash2, Save, X, Loader2, Upload, LogOut } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -15,9 +15,9 @@ export default function AdminPage() {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadMode, setUploadMode] = useState<"url" | "file">("url")
   const [imagePreview, setImagePreview] = useState("")
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
   const router = useRouter()
 
-  // Form State
   const [formData, setFormData] = useState<Project>({
     title: "",
     description: "",
@@ -31,21 +31,62 @@ export default function AdminPage() {
   })
 
   useEffect(() => {
+    checkAuth()
     fetchProjects()
   }, [])
 
-  async function handleLogout() {
+  async function checkAuth() {
     try {
-      await supabase.auth.signOut()
+      if (!supabase) {
+        console.error("Supabase is not initialized. Please check your environment variables.")
+        router.push("/login")
+        return
+      }
+
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.push("/login")
+      }
+    } catch (error) {
+      console.error("Auth check error:", error)
       router.push("/login")
-      router.refresh()
+    }
+  }
+
+  async function handleLogout() {
+    setIsLoggingOut(true)
+    try {
+      const { success, error } = await safeLogout()
+
+      if (!success) {
+        throw error || new Error("Logout failed")
+      }
+
+      setProjects([])
+      setEditingProject(null)
+      setIsFormOpen(false)
+
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      router.push("/login?logout=true")
+
+      setTimeout(() => {
+        window.location.href = "/login"
+      }, 1000)
     } catch (error) {
       console.error("Error logging out:", error)
+      const errorMsg = error instanceof Error ? error.message : "Unknown error"
+      alert(`Error logging out: ${errorMsg}`)
+      setIsLoggingOut(false)
     }
   }
 
   async function fetchProjects() {
     try {
+      if (!supabase) {
+        console.error("Supabase is not initialized")
+        return
+      }
       setLoading(true)
       const { data, error } = await supabase
         .from("projects")
@@ -56,7 +97,7 @@ export default function AdminPage() {
       if (data) setProjects(data)
     } catch (error: any) {
       console.error("Error fetching projects:", error)
-      alert(`Error fetching projects: ${JSON.stringify(error, null, 2)}`)
+      alert(`Error fetching projects: ${error.message || JSON.stringify(error, null, 2)}`)
     } finally {
       setLoading(false)
     }
@@ -64,24 +105,30 @@ export default function AdminPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+
+    if (!supabase) {
+      alert("Supabase is not initialized. Please check your configuration.")
+      return
+    }
+
     try {
       if (editingProject?.id) {
         const { error } = await supabase
           .from("projects")
           .update(formData)
           .eq("id", editingProject.id)
-        
+
         if (error) throw error
         alert("Project updated successfully!")
       } else {
         const { error } = await supabase
           .from("projects")
           .insert([formData])
-        
+
         if (error) throw error
         alert("Project created successfully!")
       }
-      
+
       closeForm()
       fetchProjects()
     } catch (error) {
@@ -92,6 +139,11 @@ export default function AdminPage() {
 
   async function handleDelete(id: number) {
     if (!confirm("Are you sure you want to delete this project?")) return
+
+    if (!supabase) {
+      alert("Supabase is not initialized. Please check your configuration.")
+      return
+    }
 
     try {
       const { error } = await supabase.from("projects").delete().eq("id", id)
@@ -108,7 +160,11 @@ export default function AdminPage() {
     setFormData(project)
     setImagePreview(project.image)
     setIsFormOpen(true)
-    setUploadMode(project.image.startsWith("http") && project.image.includes("supabase") ? "file" : "url")
+    setUploadMode(
+      project.image.startsWith("http") && project.image.includes("supabase")
+        ? "file"
+        : "url"
+    )
   }
 
   function openCreate() {
@@ -143,7 +199,7 @@ export default function AdminPage() {
   function toggleCategory(cat: "all" | "frontend" | "uiux") {
     const current = [...formData.category]
     if (current.includes(cat)) {
-      setFormData({ ...formData, category: current.filter(c => c !== cat) })
+      setFormData({ ...formData, category: current.filter((c) => c !== cat) })
     } else {
       setFormData({ ...formData, category: [...current, cat] })
     }
@@ -152,25 +208,34 @@ export default function AdminPage() {
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files || e.target.files.length === 0) return
 
+    if (!supabase) {
+      alert("Supabase is not initialized. Please check your configuration.")
+      return
+    }
+
     const file = e.target.files[0]
-    const fileExt = file.name.split('.').pop()
+    const fileExt = file.name.split(".").pop()
     const fileName = `${Date.now()}.${fileExt}`
     const filePath = `${fileName}`
 
     setIsUploading(true)
     try {
       const { error: uploadError } = await supabase.storage
-        .from('portfolio-images')
+        .from("portfolio-images")
         .upload(filePath, file)
 
       if (uploadError) throw uploadError
 
       const { data } = supabase.storage
-        .from('portfolio-images')
+        .from("portfolio-images")
         .getPublicUrl(filePath)
 
-      setFormData({ ...formData, image: data.publicUrl })
-      setImagePreview(data.publicUrl)
+      if (data?.publicUrl) {
+        setFormData({ ...formData, image: data.publicUrl })
+        setImagePreview(data.publicUrl)
+      } else {
+        throw new Error("Could not get public URL for uploaded image")
+      }
     } catch (error: any) {
       alert(`Error uploading image: ${error.message}`)
     } finally {
@@ -180,13 +245,12 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-[#1a1918] text-white p-8">
-      {/* Header & List (Same as before) */}
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Project Admin</h1>
           <button
             onClick={openCreate}
-            className="cursor-target flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-black px-4 py-2 rounded-lg font-medium transition-colors"
+            className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-black px-4 py-2 rounded-lg font-medium transition-colors"
           >
             <Plus size={20} />
             Add Project
@@ -200,9 +264,16 @@ export default function AdminPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project) => (
-              <div key={project.id} className="bg-[#232325] border border-white/5 rounded-xl overflow-hidden group">
+              <div
+                key={project.id}
+                className="bg-[#232325] border border-white/5 rounded-xl overflow-hidden group"
+              >
                 <div className="relative h-48">
-                  <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <button
                       onClick={() => openEdit(project)}
@@ -220,10 +291,15 @@ export default function AdminPage() {
                 </div>
                 <div className="p-4">
                   <h3 className="font-bold text-lg mb-1">{project.title}</h3>
-                  <p className="text-gray-400 text-sm line-clamp-2">{project.description}</p>
+                  <p className="text-gray-400 text-sm line-clamp-2">
+                    {project.description}
+                  </p>
                   <div className="mt-3 flex flex-wrap gap-1">
                     {project.category.map((cat) => (
-                      <span key={cat} className="text-xs bg-white/10 px-2 py-1 rounded-full text-gray-300">
+                      <span
+                        key={cat}
+                        className="text-xs bg-white/10 px-2 py-1 rounded-full text-gray-300"
+                      >
                         {cat}
                       </span>
                     ))}
@@ -239,12 +315,17 @@ export default function AdminPage() {
           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
             <div className="bg-[#232325] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-white/10 flex justify-between items-center sticky top-0 bg-[#232325] z-10">
-                <h2 className="text-xl font-bold">{editingProject ? "Edit Project" : "New Project"}</h2>
-                <button onClick={closeForm} className="text-gray-400 hover:text-white">
+                <h2 className="text-xl font-bold">
+                  {editingProject ? "Edit Project" : "New Project"}
+                </h2>
+                <button
+                  onClick={closeForm}
+                  className="text-gray-400 hover:text-white"
+                >
                   <X size={24} />
                 </button>
               </div>
-              
+
               <form onSubmit={handleSubmit} className="p-6 space-y-4">
                 {/* Image Preview with Blur Background */}
                 {imagePreview && (
@@ -253,8 +334,8 @@ export default function AdminPage() {
                       className="absolute inset-0 blur-md"
                       style={{
                         backgroundImage: `url('${imagePreview}')`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
                       }}
                     />
                     <img
@@ -268,30 +349,44 @@ export default function AdminPage() {
                 {/* Title & Image Upload */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Title</label>
+                    <label className="block text-sm text-gray-400 mb-1">
+                      Title
+                    </label>
                     <input
                       type="text"
                       value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, title: e.target.value })
+                      }
                       className="w-full bg-black/20 border border-white/10 rounded-lg p-2 focus:border-amber-500 outline-none"
                       required
                     />
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Image Source</label>
+                    <label className="block text-sm text-gray-400 mb-1">
+                      Image Source
+                    </label>
                     <div className="flex gap-2 mb-2">
                       <button
                         type="button"
                         onClick={() => setUploadMode("url")}
-                        className={`px-3 py-1 rounded text-xs ${uploadMode === "url" ? "bg-amber-500 text-black" : "bg-white/10"}`}
+                        className={`px-3 py-1 rounded text-xs ${
+                          uploadMode === "url"
+                            ? "bg-amber-500 text-black"
+                            : "bg-white/10"
+                        }`}
                       >
                         URL Link
                       </button>
                       <button
                         type="button"
                         onClick={() => setUploadMode("file")}
-                        className={`px-3 py-1 rounded text-xs ${uploadMode === "file" ? "bg-amber-500 text-black" : "bg-white/10"}`}
+                        className={`px-3 py-1 rounded text-xs ${
+                          uploadMode === "file"
+                            ? "bg-amber-500 text-black"
+                            : "bg-white/10"
+                        }`}
                       >
                         Upload File
                       </button>
@@ -329,9 +424,12 @@ export default function AdminPage() {
                             </span>
                           )}
                         </label>
-                        {formData.image && formData.image.includes("supabase") && (
-                          <p className="text-xs text-green-500 mt-1 truncate">Image uploaded!</p>
-                        )}
+                        {formData.image &&
+                          formData.image.includes("supabase") && (
+                            <p className="text-xs text-green-500 mt-1 truncate">
+                              Image uploaded!
+                            </p>
+                          )}
                       </div>
                     )}
                   </div>
@@ -339,10 +437,14 @@ export default function AdminPage() {
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm text-gray-400 mb-1">Description</label>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    Description
+                  </label>
                   <textarea
                     value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     className="w-full bg-black/20 border border-white/10 rounded-lg p-2 focus:border-amber-500 outline-none h-24"
                     required
                   />
@@ -351,7 +453,9 @@ export default function AdminPage() {
                 {/* Technologies & Categories */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Technologies (comma separated)</label>
+                    <label className="block text-sm text-gray-400 mb-1">
+                      Technologies (comma separated)
+                    </label>
                     <input
                       type="text"
                       value={formData.technologies.join(", ")}
@@ -359,20 +463,28 @@ export default function AdminPage() {
                       className="w-full bg-black/20 border border-white/10 rounded-lg p-2 focus:border-amber-500 outline-none"
                     />
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">Category</label>
+                    <label className="block text-sm text-gray-400 mb-2">
+                      Category
+                    </label>
                     <div className="flex flex-wrap gap-2">
                       {["all", "frontend", "uiux"].map((cat) => (
                         <button
                           key={cat}
                           type="button"
-                          onClick={() => toggleCategory(cat as any)}
+                          onClick={() =>
+                            toggleCategory(cat as "all" | "frontend" | "uiux")
+                          }
                           className={`
                             px-3 py-1 rounded-full text-xs border transition-colors
-                            ${formData.category.includes(cat as any)
-                              ? "bg-amber-500 border-amber-500 text-black font-bold"
-                              : "bg-transparent border-white/20 text-gray-400 hover:border-white"}
+                            ${
+                              formData.category.includes(
+                                cat as "all" | "frontend" | "uiux"
+                              )
+                                ? "bg-amber-500 border-amber-500 text-black font-bold"
+                                : "bg-transparent border-white/20 text-gray-400 hover:border-white"
+                            }
                           `}
                         >
                           {cat}
@@ -385,46 +497,62 @@ export default function AdminPage() {
                 {/* Links */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Github URL</label>
+                    <label className="block text-sm text-gray-400 mb-1">
+                      Github URL
+                    </label>
                     <input
                       type="text"
                       value={formData.github || ""}
-                      onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, github: e.target.value })
+                      }
                       placeholder="Optional"
                       className="w-full bg-black/20 border border-white/10 rounded-lg p-2 focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Figma URL</label>
+                    <label className="block text-sm text-gray-400 mb-1">
+                      Figma URL
+                    </label>
                     <input
                       type="text"
                       value={formData.figma || ""}
-                      onChange={(e) => setFormData({ ...formData, figma: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, figma: e.target.value })
+                      }
                       placeholder="Optional"
                       className="w-full bg-black/20 border border-white/10 rounded-lg p-2 focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Website URL</label>
+                    <label className="block text-sm text-gray-400 mb-1">
+                      Website URL
+                    </label>
                     <input
                       type="text"
                       value={formData.website || ""}
-                      onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, website: e.target.value })
+                      }
                       placeholder="Optional"
                       className="w-full bg-black/20 border border-white/10 rounded-lg p-2 focus:border-amber-500 outline-none"
                     />
                   </div>
                 </div>
-                
+
                 <div>
-                    <label className="block text-sm text-gray-400 mb-1">Color (Tailwind Gradient)</label>
-                    <input
-                      type="text"
-                      value={formData.color}
-                      onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                      className="w-full bg-black/20 border border-white/10 rounded-lg p-2 focus:border-amber-500 outline-none"
-                    />
-                  </div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    Color (Tailwind Gradient)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.color}
+                    onChange={(e) =>
+                      setFormData({ ...formData, color: e.target.value })
+                    }
+                    className="w-full bg-black/20 border border-white/10 rounded-lg p-2 focus:border-amber-500 outline-none"
+                  />
+                </div>
 
                 {/* Actions */}
                 <div className="pt-4 flex justify-end gap-3 border-t border-white/10 mt-4">
@@ -438,7 +566,7 @@ export default function AdminPage() {
                   <button
                     type="submit"
                     disabled={isUploading}
-                    className="x-7 py-2 rounded-lg bg-amber-500 text-black font-bold hover:bg-amber-600 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-7 py-2 rounded-lg bg-amber-500 text-black font-bold hover:bg-amber-600 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Save size={18} />
                     {isUploading ? "Uploading..." : "Save Project"}
@@ -448,22 +576,24 @@ export default function AdminPage() {
             </div>
           </div>
         )}
-         <TargetCursor spinDuration={2} hideDefaultCursor={true} />
+        <TargetCursor spinDuration={2} hideDefaultCursor={true} />
       </div>
 
       {/* Floating Logout Button */}
-      <div className="fixed bottom-8 right-8 z-40 cursor-target">
+      <div className="fixed bottom-8 right-8 z-40">
         <button
           onClick={handleLogout}
-          className="group bg-[#232325] hover:bg-red-500/10 border border-white/10 hover:border-red-500/50 text-gray-400 hover:text-red-500 p-4 rounded-full shadow-2xl transition-all duration-300 flex items-center gap-0 hover:gap-2 overflow-hidden"
-          title="Logout"
+          disabled={isLoggingOut}
+          className="group bg-[#232325] hover:bg-red-500/10 border border-white/10 hover:border-red-500/50 text-gray-400 hover:text-red-500 p-4 rounded-full shadow-2xl transition-all duration-300 flex items-center gap-0 hover:gap-2 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+          title={isLoggingOut ? "Logging out..." : "Logout"}
         >
           <LogOut size={20} />
           <span className="max-w-0 group-hover:max-w-[100px] opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap font-medium text-sm">
-            Logout
+            {isLoggingOut ? "Logging out..." : "Logout"}
           </span>
         </button>
       </div>
     </div>
   )
 }
+
