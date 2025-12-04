@@ -10,7 +10,7 @@ export default function TestSupabase() {
   useEffect(() => {
     async function check() {
       try {
-        // 1. Cek Env Vars (tanpa menampilkan key penuh demi keamanan)
+        // 1. Cek Env Vars
         const url = process.env.NEXT_PUBLIC_SUPABASE_URL
         const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
         
@@ -24,6 +24,11 @@ export default function TestSupabase() {
         setEnvInfo(info)
 
         // 2. Cek Koneksi
+        if (!supabase) {
+          setStatus("SKIPPED: Supabase not configured")
+          return
+        }
+
         const { data, error } = await supabase.from("projects").select("count", { count: "exact", head: true })
         
         if (error) {

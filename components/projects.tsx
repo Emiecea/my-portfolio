@@ -25,6 +25,12 @@ export default function Projects() {
   useEffect(() => {
     async function fetchProjects() {
       try {
+        if (!supabase) {
+          console.warn("Supabase client not initialized")
+          setIsLoading(false)
+          return
+        }
+
         const { data, error } = await supabase
           .from("projects")
           .select("*")
