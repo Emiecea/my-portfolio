@@ -51,7 +51,7 @@ export default function Footer() {
   const services = [
     { icon: Code2, label: "Web Development" },
     { icon: Palette, label: "UI/UX Design" },
-    { icon: Sparkles, label: "Game Design" },
+    { icon: Sparkles, label: "Front-end Engineer" },
   ]
 
   const socialLinks = [
@@ -62,12 +62,14 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-linear-to-b from-[#252423] to-[#1a1918] relative overflow-hidden">
+    <footer className="bg-[#252423] relative overflow-hidden" style={{ clipPath: "polygon(0 0, calc(8% + 20px) 0, calc(8% + 40px) 40px, 100% 40px, 100% 100%, 0 100%)" }}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-0 right-0 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-linear-to-r from-amber-500/5 to-purple-500/5 rounded-full blur-3xl animate-spin-slow" />
+        {/* Folder tab highlight */}
+        <div className="absolute top-0 left-[8%] w-24 h-10 bg-[#252423]" style={{ clipPath: "polygon(0 0, 100% 0, 100% 40px, calc(100% - 20px) 40px, calc(100% - 20px) calc(100% - 10px), 0 calc(100% - 10px))" }}></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
@@ -84,7 +86,7 @@ export default function Footer() {
               <div className="flex items-center gap-3">
                 <div className="cursor-target relative w-12 h-12 group-hover:scale-110 transition-transform">
                   <Image
-                    src="/gutsi-logo.svg"
+                    src="/gutsi-logo-copy.png"
                     alt="Gutsi Logo"
                     width={48}
                     height={48}
@@ -99,7 +101,7 @@ export default function Footer() {
               </div>
             </button>
             <p className="text-gray-300 text-sm mb-6 leading-relaxed">
-              Crafting exceptional digital experiences through innovative design and cutting-edge development.
+              Building websites and applications that actually work well for real people.
             </p>
             <div className="space-y-3">
               {services.map((service) => (

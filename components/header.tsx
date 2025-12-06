@@ -88,7 +88,7 @@ export default function Header() {
           >
           <div className="cursor-target relative w-12 h-12 group-hover:scale-110 transition-transform">
                   <Image
-                    src="/gutsi-logo.svg"
+                    src="/gutsi-logo-copy.png"
                     alt="Gutsi Logo"
                     width={48}
                     height={48}

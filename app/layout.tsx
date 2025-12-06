@@ -16,7 +16,7 @@ const leagueSpartan = League_Spartan({
 
 export const metadata: Metadata = {
   title: {
-    default: "Gusti Gibran Avattar - Front-end Developer & UI/UX Designer",
+    default: "Gusti Gibran Avattar - Front-end Engineer & UI/UX Designer",
     template: "%s | Gusti Gibran Avattar"
   },
   description:
@@ -25,14 +25,15 @@ export const metadata: Metadata = {
     "Gusti Gibran Avattar", 
     "Gusti Gibran", 
     "Avattar", 
-    "Portfolio", 
-    "Creative Developer", 
+    "Portfolio",  
+    "Portofolio",  
     "UI/UX Designer", 
-    "Frontend Developer", 
+    "Frontend Engineer", 
     "Web Developer Malang", 
     "Interactive Web Design",
     "Next.js Developer",
     "React Specialist",
+    "Gusti Gibran Avattar Portofolio", 
     "Gusti Gibran Avattar Portfolio"
   ],
   authors: [{ name: "Gusti Gibran Avattar", url: "https://gutsi.my.id" }],

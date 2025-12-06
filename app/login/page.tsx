@@ -72,7 +72,7 @@ export default function LoginPage() {
       {/* Back Button */}
       <button
         onClick={() => router.push('/')}
-        className="absolute top-6 left-6 z-30 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all duration-300 cursor-target group"
+        className="absolute top-6 left-6 z-30 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 bg-linear-to-r from-amber-400 via-orange-400 to-amber-500 hover:bg-white/20 transition-all duration-300 cursor-target group"
         title="Back to Home"
       >
         <svg
@@ -97,18 +97,18 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none" />
 
         {/* Ambient Lighting */}
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[#1a1918]/80 via-transparent to-[#1a1918]/80 z-10" />
+        <div className="absolute top-0 left-0 w-full h-full bg-gradlinearient-to-b from-[#1a1918]/80 via-transparent to-[#1a1918]/80 z-10" />
         <div className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] bg-amber-500/5 rounded-full blur-[150px]" />
         <div className="absolute bottom-[10%] right-[10%] w-[40vw] h-[40vw] bg-blue-500/5 rounded-full blur-[120px]" />
 
         <div className="relative z-20 flex flex-col items-start max-w-xl px-12">
             <div className="cursor-target mb-8 p-3 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-xl inline-flex items-center justify-center">
-               <Image src="/gutsi-logo.svg" alt="Logo" width={40} height={40} className="w-10 h-10" />
+               <Image src="/gutsi-logo-copy.png" alt="Logo" width={40} height={40} className="w-10 h-10" />
             </div>
 
             <h1 className="text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
               Gutsi <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-400 via-orange-400 to-amber-500">
                 Dashboard
               </span>
             </h1>
@@ -127,7 +127,7 @@ export default function LoginPage() {
 
           <div className="text-center mb-10">
             <div className="cursor-target w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20 bg-white/5 border border-white/10">
-               <Image src="/gutsi-logo.svg" alt="Logo" width={32} height={32} className="w-8 h-8" />
+               <Image src="/gutsi-logo-copy.png" alt="Logo" width={32} height={32} className="w-8 h-8" />
             </div>
             <h2 className="text-2xl font-bold text-white tracking-tight">Welcome Back</h2>
             <p className="text-gray-500 text-sm mt-2">Please sign in to continue</p>
@@ -182,8 +182,8 @@ export default function LoginPage() {
               className={`
                 w-full py-4 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex items-center justify-center gap-2 cursor-target
                 ${success
-                    ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white cursor-default"
-                    : "bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:from-amber-500 hover:to-orange-600 hover:shadow-lg hover:shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0"}
+                    ? "bg-linear-to-r from-green-500 to-emerald-500 text-white cursor-default"
+                    : "bg-linear-to-r from-amber-400 to-orange-500 text-white hover:from-amber-500 hover:to-orange-600 hover:shadow-lg hover:shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0"}
                 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0
               `}
             >
@@ -206,7 +206,7 @@ export default function LoginPage() {
 
           <div className="mt-8 pt-8 border-t border-white/10 text-center">
              <p className="text-[10px] text-gray-600 font-mono uppercase tracking-widest">
-                Authorized Personnel Only
+                Do not Entry if you are not an Admin.
              </p>
           </div>
         </div>
