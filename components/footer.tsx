@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
-import { 
-  Github, 
-  Linkedin, 
-  Mail, 
-  MapPin, 
+import OptimizedImage from "./optimized-image"
+import {
+  Github,
+  Linkedin,
+  Mail,
+  MapPin,
   Phone,
   Instagram,
   Twitter,
@@ -85,13 +85,14 @@ export default function Footer() {
             >
               <div className="flex items-center gap-3">
                 <div className="cursor-target relative w-12 h-12 group-hover:scale-110 transition-transform">
-                  <Image
+                  <OptimizedImage
                     src="/gutsi-logo-copy.png"
+                    fallbackSrc="/gutsi-logo-copy.png"
                     alt="Gutsi Logo"
                     width={48}
                     height={48}
                     className="object-contain"
-                    priority
+                    quality={75}
                   />
                 </div>
                 <div>
@@ -153,7 +154,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-3 text-gray-400">
                 <Phone className="w-5 h-5" />
-                <span className="text-sm">Available for Freelance</span>
+                <span className="text-sm">Available for Work </span>
               </div>
             </div>
 
@@ -181,7 +182,7 @@ export default function Footer() {
               Stay Updated
             </h3>
             <p className="text-gray-400 text-sm mb-4">
-              Subscribe to get the latest updates on my projects and blog posts.
+              Follow to get the latest updates on my projects and blog posts.
             </p>
             <form onSubmit={handleSubscribe} className="space-y-3">
               <div className="relative">
@@ -198,12 +199,12 @@ export default function Footer() {
                 type="submit"
                 className="cursor-target w-full bg-linear-to-r from-amber-400 to-orange-500 text-black font-semibold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-amber-400/25 transition-all duration-300 transform hover:scale-105"
               >
-                {isSubscribed ? "✓ Subscribed!" : "Subscribe"}
+                {isSubscribed ? "✓ Following!" : "Follow"}
               </button>
             </form>
             {isSubscribed && (
               <p className="text-green-400 text-sm mt-2 animate-fade-in">
-                Thank you for subscribing!
+                Thank you for following!
               </p>
             )}
           </div>

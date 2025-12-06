@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Menu, X, Home, User, Code2, Briefcase, FolderGit2, Mail, Workflow } from "lucide-react"
 import { cn } from "@/lib/utils"
-import Image from "next/image"
+import OptimizedImage from "./optimized-image"
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -87,13 +87,14 @@ export default function Header() {
             className="group relative z-10 flex items-center gap-3"
           >
           <div className="cursor-target relative w-12 h-12 group-hover:scale-110 transition-transform">
-                  <Image
+                  <OptimizedImage
                     src="/gutsi-logo-copy.png"
+                    fallbackSrc="/gutsi-logo-copy.png"
                     alt="Gutsi Logo"
                     width={48}
                     height={48}
                     className="object-contain"
-                    priority
+                    quality={75}
                   />
                 </div>
             <div className="cursor-target flex flex-col items-start">
