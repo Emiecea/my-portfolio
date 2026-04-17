@@ -11,29 +11,44 @@ interface Song {
 
 const PLAYLIST: Song[] = [
   {
-    title: "It's Not Living (If It's Not With You) - Guitar Loop Cover",
+    title: "About You Indonesia Version Tentangmu",
+    artist: "Coverin",
+    src: "/songs/About You Indonesia Version Tentangmu - Coverin - Cover Indonesia Version.mp3",
+  },
+  {
+    title: "Narcissist",
+    artist: "No Rome ft. The 1975",
+    src: "/songs/No Rome ft. The 1975 - Narcissist (Official Video) - NoRomeVEVO.mp3",
+  },
+  {
+    title: "Happiness",
     artist: "The 1975",
-    src: "/songs/it's not living if it's not with you - the 1975 guitar loop cover - not so gently.mp3",
+    src: "/songs/The 1975 - Happiness (Official Video) - The1975VEVO.mp3",
   },
   {
-    title: "INDIGO (with u)",
-    artist: "Dilaw",
-    src: "/songs/Maki - 'INDIGO (with u)' Official Lyric Video - Tarsier Records.mp3",
+    title: "I'm In Love With You",
+    artist: "The 1975",
+    src: "/songs/The 1975 - I'm In Love With You (Official Video) - The1975VEVO.mp3",
   },
   {
-    title: "Turning Green",
-    artist: "Maki",
-    src: "/songs/Maki - 'turning green' Official Lyric Video - Tarsier Records.mp3",
-  },
-  {
-    title: "Dilaw",
-    artist: "Maki",
-    src: "/songs/“Dilaw” - Maki (Official Lyric Video) - Tarsier Records.mp3",
-  },
-  {
-    title: "About You / Robbers (Medley)",
+    title: "About You / Robbers / Medicine (Medley)",
     artist: "The 1975",
     src: "/songs/The 1975 __ About You - Robbers - An Encounter - I Always Wanna Die - Medicine - Head.Cars.Bending - Up And Drumming.mp3",
+  },
+  {
+    title: "It's Not Living (If It's Not With You)",
+    artist: "The 1975",
+    src: "/songs/The 1975 ~ It's Not Living (If It's Not With You) Lyrics - heartbroke corner.mp3",
+  },
+  {
+    title: "The Man Who Can't Be Moved",
+    artist: "The Script",
+    src: "/songs/The Script - The Man Who Can’t Be Moved (Official Video) - TheScriptVEVO.mp3",
+  },
+  {
+    title: "It's Not Living (Guitar Loop Cover)",
+    artist: "The 1975",
+    src: "/songs/it's not living if it's not with you - the 1975 guitar loop cover - not so gently.mp3",
   },
 ]
 
@@ -62,6 +77,12 @@ export default function VibePlayer() {
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [isInitialized, setIsInitialized] = useState(false)
+  const [hasInteracted, setHasInteracted] = useState(false)
+
+  // Initialize specific random song on mount
+  useEffect(() => {
+    setCurrentSongIndex(Math.floor(Math.random() * PLAYLIST.length))
+  }, [])
 
   // Mouse event handlers for dragging
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -159,10 +180,10 @@ export default function VibePlayer() {
     };
   }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
-  const initAudio = () => {
+  const initAudio = useCallback(() => {
     if (audioRef.current) return
 
-    audioRef.current = new Audio(PLAYLIST[0].src)
+    audioRef.current = new Audio(PLAYLIST[currentSongIndex].src)
     audioRef.current.volume = 0.4
 
     const audio = audioRef.current
@@ -174,13 +195,13 @@ export default function VibePlayer() {
     }
 
     const handleEnded = () => {
-      playNext()
+      setCurrentSongIndex((prev) => (prev + 1) % PLAYLIST.length)
     }
 
     audio.addEventListener("timeupdate", updateProgress)
     audio.addEventListener("ended", handleEnded)
     setIsInitialized(true)
-  }
+  }, [currentSongIndex])
 
   useEffect(() => {
     return () => {
@@ -203,6 +224,29 @@ export default function VibePlayer() {
       }
     }
   }, [isPlaying, isInitialized])
+
+  // System-wide interaction-based autoplay
+  useEffect(() => {
+    const startAudioOnInteract = () => {
+      if (!hasInteracted) {
+        setHasInteracted(true)
+        if (!isInitialized) {
+          initAudio()
+        }
+        setIsPlaying(true)
+      }
+    }
+
+    window.addEventListener('click', startAudioOnInteract, { once: true })
+    window.addEventListener('scroll', startAudioOnInteract, { once: true })
+    window.addEventListener('keydown', startAudioOnInteract, { once: true })
+
+    return () => {
+      window.removeEventListener('click', startAudioOnInteract)
+      window.removeEventListener('scroll', startAudioOnInteract)
+      window.removeEventListener('keydown', startAudioOnInteract)
+    }
+  }, [hasInteracted, isInitialized, initAudio])
 
   useEffect(() => {
     if (!isInitialized) return
