@@ -12,6 +12,7 @@ export default function Experience() {
   const [showCertificate, setShowCertificate] = useState(false);
   const [certificateImage, setCertificateImage] = useState("");
   const [certificateTitle, setCertificateTitle] = useState("");
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   // Add individual refs for each experience card animation
   const internRef = useScrollAnimation({ triggerStart: "top 85%" });
@@ -20,6 +21,7 @@ export default function Experience() {
   const educationRef = useScrollAnimation({ triggerStart: "top 85%" });
 
   const handleCertificateClick = (image: string, title: string) => {
+    setIsImageLoading(true);
     setCertificateImage(image);
     setCertificateTitle(title);
     setShowCertificate(true);
@@ -327,13 +329,24 @@ export default function Experience() {
               <h3 className="text-2xl font-bold text-white">{certificateTitle}</h3>
             </div>
 
-            <div className="bg-[#1a1918] p-6 flex items-center justify-center">
+            <div className="bg-[#1a1918] p-6 flex items-center justify-center relative min-h-[40vh] sm:min-h-[60vh]">
+              {/* Skeleton Loader */}
+              {isImageLoading && (
+                <div className="absolute inset-6 flex items-center justify-center bg-[#232325] rounded-lg animate-pulse">
+                  <div className="flex flex-col items-center gap-4">
+                     <div className="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
+                     <span className="text-amber-500/50 text-sm font-medium animate-pulse">Wait a seconds....</span>
+                  </div>
+                </div>
+              )}
+
               <Image
                 src={certificateImage}
                 alt={`${certificateTitle} Certificate`}
                 width={800}
                 height={600}
-                className="max-w-full max-h-[70vh] object-contain rounded-lg"
+                className={`max-w-full max-h-[70vh] object-contain rounded-lg transition-opacity duration-500 ${isImageLoading ? 'opacity-0' : 'opacity-100'}`}
+                onLoad={() => setIsImageLoading(false)}
                 priority
               />
             </div>
