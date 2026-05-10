@@ -44,7 +44,7 @@ export default function About() {
           <div ref={contentRef as React.RefObject<HTMLDivElement>}>
             <div className="flex items-center space-x-2 mb-6">
               <span className="h-px w-8 bg-amber-400"></span>
-              <h2 className="text-amber-400 font-medium tracking-wider text-sm uppercase">Who is Gusti Gibran Avattar?</h2>
+              <h2 className="text-amber-400 font-medium tracking-wider text-sm uppercase">Who is Mica Leeonel?</h2>
             </div>
             
             <h3 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
