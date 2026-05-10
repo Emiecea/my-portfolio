@@ -100,7 +100,7 @@ export default function Hero() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                 </span>
-                <span className="text-amber-200 text-xs font-medium tracking-wide uppercase">Curenntly doing an internship</span>
+                <span className="text-amber-200 text-xs font-medium tracking-wide uppercase">Currently doing an internship</span>
               </div>
             </div>
 
@@ -112,7 +112,7 @@ export default function Hero() {
             </h2>
 
             <h1 className="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed">
-              Hi, I'm <span className="text-white font-semibold">Gusti Gibran Avattar</span>. 
+              Hi, I'm <span className="text-white font-semibold">Mica Leeonel</span>. 
               I build accessible, pixel-perfect, and performant web experiences that blend design and engineering.
             </h1>
 
@@ -129,19 +129,19 @@ export default function Hero() {
               {/* Social Links */}
               <div ref={socialLinksRef} className="cursor-target flex items-center gap-4">
                 <SocialLink 
-                  href="https://github.com/BranProHengker"
+                  href="https://github.com/Emiecea"
                   icon={<Github size={22} />}
-                  ariaLabel="Visit Gusti Gibran Avattar's GitHub Profile"
+                  ariaLabel="Visit Mica Leeonel's GitHub Profile"
                 />
                 <SocialLink
-                  href="https://www.linkedin.com/in/gusti-gibran-avattar-819455389/"
+                  href="https://www.linkedin.com/in/mica-leeonel/"
                   icon={<Linkedin size={22} />}
-                  ariaLabel="Visit Gusti Gibran Avattar's LinkedIn Profile"
+                  ariaLabel="Visit Mica Leeonel's LinkedIn Profile"
                 />
                 <SocialLink
-                  href="mailto:gustigibranavttr@gmail.com"
+                  href="mailto:micaleeonel1140@gmail.com"
                   icon={<Mail size={22} />}
-                  ariaLabel="Contact Gusti Gibran Avattar via Email"
+                  ariaLabel="Contact Mica Leeonel via Email"
                   isEmail
                 />
               </div>
@@ -151,12 +151,12 @@ export default function Hero() {
             <div className="mt-12 flex flex-wrap gap-4 justify-center lg:justify-start text-sm text-gray-500 font-mono">
                <div className="flex items-center gap-2">
                  <MapPin className="w-4 h-4 text-amber-500" />
-                 <span>Malang, Indonesia</span>
+                 <span>Surakarta, Indonesia</span>
                </div>
                <div className="w-1 h-1 bg-gray-700 rounded-full self-center hidden sm:block" />
                <div className="flex items-center gap-2">
                  <Sparkles className="w-4 h-4 text-purple-500" />
-                 <span>UI/UX Designer</span>
+                 <span>videografer</span>
                </div>
                <div className="w-1 h-1 bg-gray-700 rounded-full self-center hidden sm:block" />
                <div className="flex items-center gap-2">
