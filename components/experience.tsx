@@ -99,7 +99,7 @@ export default function Experience() {
                             </div>
                             <div className="flex items-center gap-2">
                                <MapPin className="w-4 h-4" />
-                               <span>Malang, ID</span>
+                               <span>Surakarta, ID</span>
                             </div>
                          </div>
                       </div>
@@ -166,7 +166,7 @@ export default function Experience() {
                             >
                               <Award className="w-4 h-4 text-blue-400 group-hover/cert:text-blue-300 transition-colors" />
                               <MapPin className="w-4 h-4" />
-                              <span>Surabaya, ID</span>
+                              <span>Surakarta, ID</span>
                             </div>
                          </div>
                       </div>
@@ -272,7 +272,7 @@ export default function Experience() {
                                <h3 className="text-xl sm:text-2xl font-bold text-white mb-1">Software Engineering</h3>
                                <div className="flex items-center gap-2 text-slate-400/80 font-medium">
                                   <Building2 className="w-4 h-4" />
-                                  <span>SMK Negeri 6 Malang</span>
+                                  <span>SMK Al Islam Surakarta</span>
                                </div>
                             </div>
                          </div>
@@ -283,7 +283,7 @@ export default function Experience() {
                             </div>
                             <div className="flex items-center gap-2">
                                <MapPin className="w-4 h-4" />
-                               <span>Malang, ID</span>
+                               <span>Solo, ID</span>
                             </div>
                          </div>
                       </div>
