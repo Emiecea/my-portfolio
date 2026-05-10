@@ -1,7 +1,7 @@
 {
-  "name": "Gusti Gibran Portfolio",
-  "short_name": "Gibran Portfolio",
-  "description": "Portfolio of Gusti Gibran - UI/UX Designer & Front-end Developer",
+  "name": "Mica Leeonel Portfolio",
+  "short_name": "Mica Portfolio",
+  "description": "Portfolio of Mica Leeonel - Front-end Developer & Videografer",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1918",
@@ -20,5 +20,5 @@
       "type": "image/png"
     }
   ],
-  "categories": ["portfolio", "personal", "developer", "designer"]
+  "categories": ["portfolio", "personal", "developer", "videografer"]
 }
