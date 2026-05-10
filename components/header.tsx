@@ -112,7 +112,7 @@ export default function Header() {
                 </div>
             <div className="cursor-target flex flex-col items-start">
               <span className="text-white font-bold text-lg leading-none tracking-tight group-hover:text-amber-400 transition-colors">
-                Gusti Gibran Avattar
+                Mica Leeonel
               </span>
               <span className="text-[10px] text-gray-400 uppercase tracking-widest">Portfolio</span>
             </div>
