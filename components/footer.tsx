@@ -96,7 +96,7 @@ export default function Footer() {
                   />
                 </div>
                 <div>
-                  <span className="text-white font-bold text-xl">Gibran</span>
+                  <span className="text-white font-bold text-xl">Mica</span>
                   <p className="text-gray-400 text-xs">Portfolio</p>
                 </div>
               </div>
@@ -142,15 +142,15 @@ export default function Footer() {
             </h3>
             <div className="space-y-4">
               <a
-                href="mailto:gustigibranavattr@gmail.com"
+                href="mailto:micaleeonel1140@gmail.com"
                 className="flex items-center gap-3 text-gray-400 hover:text-amber-400 transition-colors group"
               >
                 <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span className="text-sm">gustigibranavattr@gmail.com</span>
+                <span className="text-sm">micaleeonel1140@gmail.com</span>
               </a>
               <div className="flex items-center gap-3 text-gray-400">
                 <MapPin className="w-5 h-5" />
-                <span className="text-sm">Malang, East Java, Indonesia</span>
+                <span className="text-sm">Surakarta, Central Java, Indonesia</span>
               </div>
               <div className="flex items-center gap-3 text-gray-400">
                 <Phone className="w-5 h-5" />
