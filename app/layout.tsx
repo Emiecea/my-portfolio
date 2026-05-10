@@ -16,65 +16,65 @@ const leagueSpartan = League_Spartan({
 
 export const metadata: Metadata = {
   title: {
-    default: "Gusti Gibran Avattar | Front-end Engineer & UI/UX Designer",
-    template: "%s | Gusti Gibran Avattar"
+    default: "Mica Leeonel | Front-end Engineer & Videografer",
+    template: "%s | Mica Leeonel"
   },
   description:
-    "Transforming complex problems into elegant web experiences. Explore the portfolio of Gusti Gibran Avattar, a Front-end Engineer with immersive UI/UX design.",
+    "Transforming complex problems into elegant web experiences. Explore the portfolio of Mica Leeonel, a Front-end Engineer with immersive UI/UX design.",
   keywords: [
-    "Gusti Gibran Avattar", 
-    "Who is Gusti Gibran Avattar",
-    "Gusti Gibran", 
-    "Avattar", 
-    "Gusti Gibran Avattar Portfolio", 
-    "Portofolio Gusti Gibran Avattar",  
-    "UI/UX Designer Indonesia", 
+    "Mica Leeonel", 
+    "Who is Mica Leeonel",
+    "Mica", 
+    "Leeonel", 
+    "Mica Leeonel Portfolio", 
+    "Portofolio Mica Leeonel",  
+    "Videografer Indonesia", 
     "Frontend Developer Indonesia",
     "Frontend Engineer", 
-    "Web Developer Malang", 
+    "Web Developer Surakarta", 
     "React Ecosystem Developer",
     "Interactive Web Design",
     "Next.js Developer"
   ],
-  authors: [{ name: "Gusti Gibran Avattar", url: "https://gutsi.my.id" }],
-  creator: "Gusti Gibran Avattar",
-  publisher: "Gusti Gibran Avattar",
+  authors: [{ name: "Mica Leeonel", url: "https://micaleeonel.my.id" }],
+  creator: "Mica Leeonel",
+  publisher: "Mica Leeonel",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://gutsi.my.id'),
+  metadataBase: new URL('https://micaleeonel.my.id'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: "profile",
     locale: "en_US",
-    url: "https://gutsi.my.id",
-    title: "Gusti Gibran Avattar | Front-end Engineer & UI/UX Designer",
+    url: "https://micaleeonel.my.id",
+    title: "Mica Leeonel | Front-end Engineer & Videografer",
     description:
-      "Transforming complex problems into elegant web experiences. Explore the portfolio of Gusti Gibran Avattar, a Front-end Engineer blending the React ecosystem with immersive design.",
-    siteName: "Gusti Gibran Avattar Portfolio",
+      "Transforming complex problems into elegant web experiences. Explore the portfolio of Mica Leeonel, a Front-end Engineer blending the React ecosystem with immersive design.",
+    siteName: "Mica Leeonel Portfolio",
     images: [
       {
         url: '/saya-versi-ai.png',
         width: 1200,
         height: 630,
-        alt: 'Gusti Gibran Avattar -  Web Developer',
+        alt: 'Mica Leeonel -  Web Developer',
       },
     ],
-    firstName: "Gusti",
-    lastName: "Gibran Avattar",
-    username: "gibran",
+    firstName: "Mica",
+    lastName: "Leeonel",
+    username: "leeonel",
     gender: "male",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gusti Gibran Avattar | Front-end Engineer & UI/UX Designer",
-    description: "Transforming complex problems into elegant web experiences. Explore the portfolio of Gusti Gibran Avattar.",
+    title: "Mica Leeonel | Front-end Engineer & Videografer",
+    description: "Transforming complex problems into elegant web experiences. Explore the portfolio of Mica Leeonel.",
     images: ['/saya-versi-ai.png'],
-    creator: '@3Br4n',
+    creator: '@micaleeonel',
   },
   icons: {
     icon: "/favicon.svg",
@@ -122,12 +122,12 @@ export default function RootLayout({
               {
                 "@context": "https://schema.org",
                 "@type": "WebSite",
-                "url": "https://gutsi.my.id",
-                "name": "Gusti Gibran Avattar Portfolio",
-                "description": "Portfolio of Gusti Gibran Avattar, a Front-end Engineer and UI/UX Designer.",
+                "url": "https://micaleeonel.my.id",
+                "name": "Mica Leeonel Portfolio",
+                "description": "Portfolio of Mica Leeonel, a Front-end Engineer and Videografer.",
                 "publisher": {
                   "@type": "Person",
-                  "name": "Gusti Gibran Avattar"
+                  "name": "Mica Leeonel"
                 }
               },
               {
@@ -137,19 +137,19 @@ export default function RootLayout({
                 "dateModified": new Date().toISOString(),
                 "mainEntity": {
                   "@type": "Person",
-                  name: "Gusti Gibran Avattar",
-                  url: "https://gutsi.my.id",
-                  jobTitle: "Front-end Developer & UI/UX Designer",
-                  image: "https://gutsi.my.id/saya-versi-ai.png",
+                  name: "Mica Leeonel",
+                  url: "https://micaleeonel.my.id",
+                  jobTitle: "Front-end Developer & Videografer",
+                  image: "https://micaleeonel.my.id/saya-versi-ai.png",
                   sameAs: [
                     "https://github.com/BranProHengker", 
-                    "https://www.linkedin.com/in/gusti-gibran-avattar-819455389/",
-                    "https://instagram.com/gustigibran"
+                    "https://www.linkedin.com/in/mica-leeonel-819455389/",
+                    "https://instagram.com/micaleeonel"
                   ],
                   description:
-                    "Gusti Gibran Avattar is a passionate Front-end Developer and UI/UX Designer specializing in building immersive web applications with the React ecosystem and modern web technologies.",
+                    "Mica Leeonel is a passionate Front-end Developer and Videografer specializing in building immersive web applications with the React ecosystem and modern web technologies.",
                   knowsAbout: [
-                    "UI/UX Design",
+                    "Videografer",
                     "Front-end Development",
                     "React Ecosystem",
                     "Next.js",
@@ -161,8 +161,8 @@ export default function RootLayout({
                   ],
                   address: {
                     "@type": "PostalAddress",
-                    addressLocality: "Malang",
-                    addressRegion: "East Java",
+                    addressLocality: "Surakarta",
+                    addressRegion: "Central Java",
                     addressCountry: "Indonesia"
                   }
                 }
