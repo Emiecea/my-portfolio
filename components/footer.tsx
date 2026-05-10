@@ -55,10 +55,10 @@ export default function Footer() {
   ]
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com/BranProHengker", label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/gusti-gibran-avattar-819455389/", label: "LinkedIn" },
-    { icon: Instagram, href: "https://instagram.com/gustigibran", label: "Instagram" },
-    { icon: Twitter, href: "https://x.com/3Br4n", label: "Twitter" },
+    { icon: Github, href: "https://github.com/Emiecea", label: "GitHub" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/mica-leeonel/", label: "LinkedIn" },
+    { icon: Instagram, href: "https://instagram.com/emiecea._", label: "Instagram" },
+    { icon: Twitter, href: "https://x.com/emiecea", label: "Twitter" },
   ]
 
   return (
