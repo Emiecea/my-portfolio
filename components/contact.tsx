@@ -56,7 +56,7 @@ export default function Contact() {
             </p>
 
             <div className="hidden lg:block">
-               <MagneticButton href="mailto:gustigibranavttr@gmail.com" />
+               <MagneticButton href="mailto:micaleeonel1140@gmail.com" />
             </div>
           </div>
 
@@ -72,10 +72,10 @@ export default function Contact() {
                          <Mail size={24} />
                       </div>
                       <h3 className="text-white font-bold text-lg mb-1">Email Me</h3>
-                      <p className="text-gray-400 text-sm">gustigibranavttr@gmail.com</p>
+                      <p className="text-gray-400 text-sm">micaleeonel1140@gmail.com</p>
                    </div>
                    <button 
-                     onClick={() => copyToClipboard("gustigibranavttr@gmail.com")}
+                     onClick={() => copyToClipboard("micaleeonel1140@gmail.com")}
                      className="flex items-center justify-between w-full py-2 px-4 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-gray-300 transition-colors"
                    >
                      <span>{copied ? "Copied!" : "Copy Email"}</span>
@@ -96,7 +96,7 @@ export default function Contact() {
                       <p className="text-gray-400 text-sm">Professional Profile</p>
                    </div>
                    <a 
-                     href="https://www.linkedin.com/in/gusti-gibran-avattar-819455389/"
+                     href="https://www.linkedin.com/in/mica-leeonel/"
                      target="_blank"
                      className="flex items-center justify-between w-full py-2 px-4 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-gray-300 transition-colors"
                    >
@@ -118,7 +118,7 @@ export default function Contact() {
                       <p className="text-gray-400 text-sm">Code Repository</p>
                    </div>
                    <a 
-                     href="https://github.com/BranProHengker"
+                     href="https://github.com/Emiecea"
                      target="_blank"
                      className="flex items-center justify-between w-full py-2 px-4 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-gray-300 transition-colors"
                    >
@@ -137,7 +137,7 @@ export default function Contact() {
                          <MapPin size={24} />
                       </div>
                       <h3 className="text-white font-bold text-lg mb-1">Location</h3>
-                      <p className="text-gray-400 text-sm">Malang, Indonesia</p>
+                      <p className="text-gray-400 text-sm">Surakarta, Indonesia</p>
                    </div>
                    <div className="flex items-center justify-between w-full py-2 px-4 bg-white/5 rounded-lg text-sm text-gray-500 cursor-default">
                      <span>Remote / On-site</span>
