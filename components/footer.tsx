@@ -96,7 +96,7 @@ export default function Footer() {
                   />
                 </div>
                 <div>
-                  <span className="text-white font-bold text-xl">Mica Leeonel</span>
+                  <span className="text-white font-bold text-xl">Mica</span>
                   <p className="text-gray-400 text-xs">Portfolio</p>
                 </div>
               </div>
