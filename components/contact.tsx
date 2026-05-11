@@ -150,7 +150,7 @@ export default function Contact() {
 
           {/* Mobile CTA */}
           <div className="lg:hidden text-center mt-8">
-             <MagneticButton href="mailto:gustigibranavttr@gmail.com" />
+             <MagneticButton href="mailto:micaleeonel1140@gmail.com" />
           </div>
 
         </div>
